@@ -12,7 +12,7 @@ import {
   Trophy,
 } from "@phosphor-icons/react";
 
-const A = "/assets/haaland/";
+const A = `${import.meta.env.BASE_URL}assets/haaland/`;
 const runnerFrames = Array.from(
   { length: 6 },
   (_, index) => `${A}runner-norway/frame-${String(index).padStart(2, "0")}.webp`,
