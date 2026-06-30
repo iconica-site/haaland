@@ -12,8 +12,12 @@ import {
   Trophy,
 } from "@phosphor-icons/react";
 
-const A = `${import.meta.env.BASE_URL}assets/haaland/`;
-const TEST_A = `${import.meta.env.BASE_URL}assets/haaland-test/regen/`;
+const routePath = window.location.pathname.replace(/\/+$/, "");
+const isTestPath = routePath.endsWith("/test");
+const assetBase = isTestPath ? "../assets/" : `${import.meta.env.BASE_URL}assets/`;
+const mainHref = isTestPath ? "../" : import.meta.env.BASE_URL;
+const A = `${assetBase}haaland/`;
+const TEST_A = `${assetBase}haaland-test/regen/`;
 const runnerFrames = Array.from(
   { length: 6 },
   (_, index) => `${A}runner-norway/frame-${String(index).padStart(2, "0")}.webp`,
@@ -483,7 +487,7 @@ function KitTestPage() {
   return (
     <main className="test-page">
       <header className="test-hero">
-        <a className="test-back" href={import.meta.env.BASE_URL}>main</a>
+        <a className="test-back" href={mainHref}>main</a>
         <div>
           <span>kit regen test</span>
           <h1>Norway 2026 rebuild</h1>
@@ -723,6 +727,5 @@ function MainApp() {
 }
 
 export function App() {
-  const pathname = window.location.pathname.replace(/\/+$/, "");
-  return pathname.endsWith("/test") ? <KitTestPage /> : <MainApp />;
+  return isTestPath ? <KitTestPage /> : <MainApp />;
 }
