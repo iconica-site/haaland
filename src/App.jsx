@@ -49,8 +49,18 @@ const eggMap = {
   d: "D",
   o: "O",
   r: "R",
+  t: "T",
+  u: "U",
   w: "W",
   y: "Y",
+};
+
+const getSecretKey = (event) => {
+  const key = event.key.toLowerCase();
+  if (eggMap[key]) return key;
+  const codeMatch = event.code.match(/^Key([A-Z])$/);
+  const codeKey = codeMatch?.[1].toLowerCase();
+  return eggMap[codeKey] ? codeKey : "";
 };
 
 function clamp(value, min, max) {
@@ -574,29 +584,31 @@ export function App() {
 
   useEffect(() => {
     const onKeyDown = (event) => {
-      const key = event.key.toLowerCase();
-      if (!eggMap[key]) return;
-      const next = (typed + key).slice(-12);
-      setTyped(next);
+      const key = getSecretKey(event);
+      if (!key) return;
 
       const unlock = (egg) => {
         setEggs((items) => (items.includes(egg) ? items : [...items, egg]));
         setChaos((value) => clamp(value + 26, 0, 999));
       };
 
-      if (next.includes("haaland")) unlock("HAALAND");
-      if (next.includes("norway")) {
-        unlock("NORWAY");
-        setModes((items) => ({ ...items, snow: true }));
-      }
-      if (next.includes("auto")) {
-        unlock("AUTO");
-        setModes((items) => ({ ...items, auto: true, vhs: true }));
-      }
+      setTyped((current) => {
+        const next = (current + key).slice(-12);
+        if (next.includes("haaland")) unlock("HAALAND");
+        if (next.includes("norway")) {
+          unlock("NORWAY");
+          setModes((items) => ({ ...items, snow: true }));
+        }
+        if (next.includes("auto")) {
+          unlock("AUTO");
+          setModes((items) => ({ ...items, auto: true, vhs: true }));
+        }
+        return next;
+      });
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [typed]);
+  }, []);
 
   const className = useMemo(() => {
     return [
