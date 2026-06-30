@@ -2,6 +2,7 @@
   "runnerFrames": 5,
   "frameWidth": 390,
   "frameHeight": 620,
-  "generatedAt": "2026-06-30T09:13:00.268Z",
-  "source": "OpenAI image_gen built-in, green-screen postprocessed locally"
+  "generatedAt": "2026-06-30T12:16:53.346Z",
+  "source": "OpenAI image_gen built-in, green-screen postprocessed locally",
+  "note": "Runner and stills regenerated with Norway 2026 vertical cross offset to viewer-left, matching the supplied shirt reference."
 }
