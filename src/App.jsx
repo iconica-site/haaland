@@ -13,9 +13,14 @@ import {
 } from "@phosphor-icons/react";
 
 const A = `${import.meta.env.BASE_URL}assets/haaland/`;
+const TEST_A = `${import.meta.env.BASE_URL}assets/haaland-test/regen/`;
 const runnerFrames = Array.from(
   { length: 6 },
   (_, index) => `${A}runner-norway/frame-${String(index).padStart(2, "0")}.webp`,
+);
+const testRunnerFrames = Array.from(
+  { length: 5 },
+  (_, index) => `${TEST_A}runner/frame-${String(index).padStart(2, "0")}.webp`,
 );
 const heroPose = `${A}hero-norway-red.webp`;
 const kickFrame = `${A}kick-volley.webp`;
@@ -467,7 +472,80 @@ function IconicaFooter() {
   );
 }
 
-export function App() {
+function KitTestPage() {
+  const originalRunner = runnerFrames;
+  const regeneratedStills = [
+    ["hero", "stills/hero.webp", "hero-norway-red.webp"],
+    ["kick", "stills/kick.webp", "kick-volley.webp"],
+    ["faceoff", "stills/faceoff.webp", "faceoff-haaland-mbappe.webp"],
+  ];
+
+  return (
+    <main className="test-page">
+      <header className="test-hero">
+        <a className="test-back" href={import.meta.env.BASE_URL}>main</a>
+        <div>
+          <span>kit regen test</span>
+          <h1>Norway 2026 rebuild</h1>
+        </div>
+      </header>
+
+      <section className="test-stage">
+        <div className="test-runner-card">
+          <div className="test-runner-loop" style={{ "--frames": testRunnerFrames.length }}>
+            {testRunnerFrames.map((src) => (
+              <img src={src} alt="" key={src} />
+            ))}
+          </div>
+        </div>
+        <div className="test-strip-card">
+          <img src={`${TEST_A}runner-strip.webp`} alt="" />
+        </div>
+      </section>
+
+      <section className="test-compare">
+        <div className="test-section-title">
+          <span>runner frames</span>
+          <h2>generated vs source</h2>
+        </div>
+        <div className="test-frame-grid">
+          {testRunnerFrames.map((src, index) => (
+            <article className="test-frame" key={src}>
+              <img src={src} alt="" />
+              <img src={originalRunner[index % originalRunner.length]} alt="" />
+              <strong>{String(index + 1).padStart(2, "0")}</strong>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="test-stills">
+        <div className="test-section-title">
+          <span>still candidates</span>
+          <h2>regenerated national-kit shots</h2>
+        </div>
+        <div className="test-still-grid">
+          {regeneratedStills.map(([label, generated, source]) => (
+            <article className="test-still" key={label}>
+              <img src={`${TEST_A}${generated}`} alt="" />
+              <div>
+                <span>{label}</span>
+                <img src={`${A}${source}`} alt="" />
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="test-sheets">
+        <img src={`${TEST_A}runner-source-sheet.png`} alt="" />
+        <img src={`${TEST_A}stills-source-sheet.png`} alt="" />
+      </section>
+    </main>
+  );
+}
+
+function MainApp() {
   const { target, hunter, frameIndex, dive, active, triggerDive, rushTo, placeAt } = useCursorHunter();
   const [shots, setShots] = useState([]);
   const [chaos, setChaos] = useState(26);
@@ -642,4 +720,9 @@ export function App() {
       <div className="noise" aria-hidden="true" />
     </main>
   );
+}
+
+export function App() {
+  const pathname = window.location.pathname.replace(/\/+$/, "");
+  return pathname.endsWith("/test") ? <KitTestPage /> : <MainApp />;
 }
