@@ -19,7 +19,7 @@ const mainHref = isTestPath ? "../" : import.meta.env.BASE_URL;
 const A = `${assetBase}haaland/`;
 const TEST_A = `${assetBase}haaland-test/regen/`;
 const runnerFrames = Array.from(
-  { length: 6 },
+  { length: 5 },
   (_, index) => `${A}runner-norway/frame-${String(index).padStart(2, "0")}.webp`,
 );
 const testRunnerFrames = Array.from(
